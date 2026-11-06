@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHERIA // Next-Gen Digital Odyssey</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: { 400: '#22d3ee', 500: '#06b6d4', 900: '#164e63' },
+                        violet: { 500: '#8b5cf6', 600: '#7c3aed', 950: '#2e1065' },
+                        emerald: { 400: '#34d399', 500: '#10b981' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(2deg)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(34, 211, 238, 0.4)' },
+                            '100%': { boxShadow: '0 0 35px rgba(139, 92, 246, 0.8)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Custom scroll behavior & utilities */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #030712;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Neon Glow Text */
+        .text-glow-cyan {
+            text-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+        }
+        .text-glow-violet {
+            text-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
+        }
+
+        /* Slide Snapping */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scrollbar-width: none; /* Firefox */
+        }
+        .slides-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        /* Custom Audio Visualizer canvas container */
+        .canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 3D Tilt perspective */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body class="select-none dark bg-gray-950">
+
+    <!-- Interactive Canvas Particle Background -->
+    <canvas id="bg-canvas" class="canvas-bg"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass-panel border-b-0 rounded-b-2xl mx-4 mt-2">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center font-bold text-white shadow-lg shadow-cyan-500/30">
+                <i class="fa-solid font-mono text-sm">Æ</i>
+            </div>
+            <span class="font-extrabold text-lg tracking-wider bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">AETHERIA</span>
+        </div>
+
+        <!-- Desktop Nav Links -->
+        <nav class="hidden md:flex items-center space-x-1 font-mono text-xs text-gray-400 bg-gray-900/60 p-1.5 rounded-full border border-gray-800">
+            <button onclick="goToSlide(0)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">01 // HERO</button>
+            <button onclick="goToSlide(1)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">02 // ARCHITECTURE</button>
+            <button onclick="goToSlide(2)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">03 // AI CORE</button>
+            <button onclick="goToSlide(3)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">04 // QUANTUM</button>
+            <button onclick="goToSlide(4)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">05 // VISUALIZER</button>
+            <button onclick="goToSlide(5)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">06 // METRICS</button>
+            <button onclick="goToSlide(6)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">07 // ECOSYSTEM</button>
+            <button onclick="goToSlide(7)" class="nav-link px-3 py-1.5 rounded-full hover:text-white transition-all">08 // LAUNCH</button>
+        </nav>
+
+        <div class="flex items-center space-x-3">
+            <button id="sound-btn" onclick="toggleAudioSynth()" class="px-3 py-1.5 rounded-full border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 text-xs font-mono flex items-center space-x-2 transition-all">
+                <i class="fa-solid fa-volume-xmark" id="sound-icon"></i>
+                <span id="sound-text">AUDIO OFF</span>
+            </button>
+            <button onclick="goToSlide(7)" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-violet-500/25 transition-all transform hover:scale-105">
+                ENTER LAB
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Slide Indicator dots -->
+    <div class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col space-y-3">
+        <template id="dot-template">
+            <button class="indicator-dot w-3 h-3 rounded-full bg-gray-700 transition-all duration-300 hover:scale-125 hover:bg-cyan-400 focus:outline-none" aria-label="Go to slide"></button>
+        </template>
+        <!-- Generated via JS -->
+        <div id="dots-wrapper" class="flex flex-col space-y-3 glass-panel p-2 rounded-full border border-gray-800"></div>
+    </div>
+
+    <!-- Main Vertical Slides Container -->
+    <main id="slides-wrapper" class="slides-container relative z-10">
+
+        <!-- ================= SLIDE 1: HERO ================= -->
+        <section id="slide-0" class="slide flex items-center justify-center px-4 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center z-10 space-y-6 pt-16">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 font-mono text-xs tracking-widest uppercase animate-pulse">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    <span>System Online // V4.9.0 Active</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight">
+                    THE NEXT <span class="bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent text-glow-cyan">DIMENSION</span> OF INTERACTION
+                </h1>
+
+                <p class="max-w-2xl mx-auto text-gray-400 text-base md:text-xl font-light leading-relaxed">
+                    A cybernetic canvas engineered for ultra-performance, hyper-fluid visual feedback, and real-time quantum data synthesis.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+                    <button onclick="goToSlide(1)" class="px-8 py-4 rounded-xl bg-cyan-500 text-gray-950 font-bold text-sm tracking-wider uppercase hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/40 flex items-center space-x-3 group">
+                        <span>Explore Architecture</span>
+                        <i class="fa-solid fa-arrow-down transform group-hover:translate-y-1 transition-transform"></i>
+                    </button>
+                    <button onclick="triggerHologramEffect()" class="px-8 py-4 rounded-xl glass-card text-white font-semibold text-sm tracking-wider uppercase hover:bg-white/10 transition-all border border-gray-700 flex items-center space-x-2">
+                        <i class="fa-solid fa-sparkles text-violet-400"></i>
+                        <span>Pulse Hologram</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Decorative Floating Elements -->
+            <div class="absolute top-1/4 left-10 w-32 h-32 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-10 w-48 h-48 rounded-full bg-violet-500/10 blur-3xl pointer-events-none"></div>
+        </section>
+
+        <!-- ================= SLIDE 2: NEURAL ARCHITECTURE ================= -->
+        <section id="slide-1" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center z-10">
+                <div class="space-y-6">
+                    <div class="text-cyan-400 font-mono text-sm tracking-wider">// 02 ARCHITECTURE</div>
+                    <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight">Hyper-Threaded Neural Engine</h2>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">
+                        Built upon a non-blocking reactive substrate. We combine webGL shaders with low-latency GPU workers to deliver 120 FPS continuous visual feedback.
+                    </p>
+                    
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex justify-between text-gray-300">
+                            <span>GPU Compute Load</span>
+                            <span id="gpu-load-txt" class="text-cyan-400">42%</span>
+                        </div>
+                        <div class="w-full bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-800">
+                            <div id="gpu-bar" class="bg-gradient-to-r from-cyan-500 to-violet-500 h-full w-[42%] transition-all duration-500"></div>
+                        </div>
+
+                        <div class="flex justify-between text-gray-300 pt-2">
+                            <span>Latency Index</span>
+                            <span class="text-emerald-400">0.42 ms</span>
+                        </div>
+                        <div class="w-full bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-800">
+                            <div class="bg-emerald-400 h-full w-[88%]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Interactive Card -->
+                <div class="perspective-1000 flex justify-center">
+                    <div id="tilt-card-1" class="glass-panel p-8 rounded-3xl w-full max-w-md preserve-3d cursor-pointer relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl group-hover:bg-cyan-500/40 transition-all"></div>
+                        <div class="space-y-6">
+                            <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Vector Matrix v8</h3>
+                            <p class="text-gray-400 text-sm">Hover over this panel to observe real-time 3D parallax tilt matrices with dynamic lighting response.</p>
+                            <div class="pt-4 border-t border-gray-800 flex justify-between items-center text-xs font-mono text-gray-500">
+                                <span>STATUS: OPTIMAL</span>
+                                <span class="text-cyan-400">PARALLAX ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 3: AI CORE & SENTIENCE ================= -->
+        <section id="slide-2" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-6xl mx-auto w-full z-10 space-y-10">
+                <div class="text-center space-y-3">
+                    <span class="text-violet-400 font-mono text-sm tracking-widest">// 03 AI CORE</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold">Autonomous Cognitive Synthesizer</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-2xl space-y-4 relative">
+                        <div class="text-violet-400 text-3xl"><i class="fa-solid fa-brain"></i></div>
+                        <h3 class="text-xl font-bold">Synaptic Adaption</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Self-assembling neural paths optimize layout layout dynamically according to user focus heatmaps.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl space-y-4 relative">
+                        <div class="text-cyan-400 text-3xl"><i class="fa-solid fa-eye"></i></div>
+                        <h3 class="text-xl font-bold">Predictive Perception</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Pre-renders next slide state machine 300ms before user interaction sequence initiates.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl space-y-4 relative">
+                        <div class="text-pink-400 text-3xl"><i class="fa-solid fa-bolt"></i></div>
+                        <h3 class="text-xl font-bold">Zero Latency Output</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Ultra-low overhead DOM manipulations driven by direct webassembly bindings.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Prompt Sim -->
+                <div class="glass-panel p-6 rounded-2xl max-w-3xl mx-auto space-y-4">
+                    <div class="flex items-center justify-between text-xs font-mono text-gray-400 border-b border-gray-800 pb-3">
+                        <span class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>INTERACTIVE PROMPT SIMULATOR</span>
+                        </span>
+                        <span>TERMINAL ID: #8892</span>
+                    </div>
+                    <div class="font-mono text-sm space-y-2">
+                        <div class="text-gray-500">> Initiating deep diagnostic check...</div>
+                        <div id="typewriter-text" class="text-cyan-300 min-h-[2.5rem]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 4: QUANTUM GRID ================= -->
+        <section id="slide-3" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-800 pb-6">
+                    <div>
+                        <span class="text-pink-500 font-mono text-sm tracking-wider">// 04 QUANTUM GRID</span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold mt-1">Multi-Dimensional Data Nodes</h2>
+                    </div>
+                    <p class="text-gray-400 text-sm max-w-md mt-4 md:mt-0">Click node blocks below to manipulate sub-atomic resonance frequency parameters in real-time.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="quantum-nodes">
+                    <!-- Dynamic interactive blocks generated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 5: AUDIO-VISUAL SYNTH ================= -->
+        <section id="slide-4" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-5xl mx-auto w-full text-center z-10 space-y-8">
+                <div>
+                    <span class="text-emerald-400 font-mono text-sm tracking-widest">// 05 VISUALIZER</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold mt-2">Interactive Waveform Synthesizer</h2>
+                    <p class="text-gray-400 text-sm max-w-lg mx-auto mt-2">Move cursor horizontally across the visualizer spectrum below to modulate synthetic audio frequency harmonics.</p>
+                </div>
+
+                <!-- Custom Visualizer Canvas Box -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden">
+                    <canvas id="visualizer-canvas" class="w-full h-64 rounded-2xl cursor-crosshair bg-gray-950/80 border border-gray-800"></canvas>
+                    <div class="flex justify-between items-center mt-4 font-mono text-xs text-gray-400">
+                        <span>FREQ: <span id="freq-val" class="text-cyan-400">440 Hz</span></span>
+                        <span>MODULATION: <span id="mod-val" class="text-violet-400">SINE WAVE</span></span>
+                        <span>STATUS: <span class="text-emerald-400">ACTIVE</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 6: METRICS & TELEMETRY ================= -->
+        <section id="slide-5" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-6xl mx-auto w-full z-10 space-y-10">
+                <div class="text-center space-y-2">
+                    <span class="text-cyan-400 font-mono text-sm tracking-wider">// 06 METRICS</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold">Real-Time Platform Telemetry</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-400">
+                        <div class="text-4xl font-extrabold text-cyan-400 font-mono" id="counter-1">0</div>
+                        <div class="text-gray-400 text-xs font-mono uppercase mt-2">OPS / SECOND</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-violet-500">
+                        <div class="text-4xl font-extrabold text-violet-400 font-mono" id="counter-2">0</div>
+                        <div class="text-gray-400 text-xs font-mono uppercase mt-2">ACTIVE NODES</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-pink-500">
+                        <div class="text-4xl font-extrabold text-pink-400 font-mono" id="counter-3">0</div>
+                        <div class="text-gray-400 text-xs font-mono uppercase mt-2">DATA THROUGHPUT (TB)</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-emerald-400">
+                        <div class="text-4xl font-extrabold text-emerald-400 font-mono" id="counter-4">0</div>
+                        <div class="text-gray-400 text-xs font-mono uppercase mt-2">UPTIME RELIABILITY %</div>
+                    </div>
+                </div>
+
+                <!-- Interactive Data Stream Table -->
+                <div class="glass-panel rounded-2xl overflow-hidden font-mono text-xs">
+                    <div class="bg-gray-900/80 px-6 py-3 border-b border-gray-800 flex justify-between items-center text-gray-400">
+                        <span>LIVE STREAM LOGS</span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    </div>
+                    <div class="p-4 space-y-2 text-gray-400 max-h-40 overflow-y-auto" id="log-terminal">
+                        <div>[00:00:01] System initializing neural buffers...</div>
+                        <div>[00:00:02] Connected to global edge nodes [32/32].</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 7: ECOSYSTEM MATRIX ================= -->
+        <section id="slide-6" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-violet-400 font-mono text-sm tracking-wider">// 07 ECOSYSTEM</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold">Full Spectrum Integration</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-8 rounded-3xl relative group hover:border-violet-500/50 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400 text-xl mb-4">
+                            <i class="fa-solid fa-vr-cardboard"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Immersive Spatial Web</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Direct WebXR compatibility enables seamless viewport transitions from flat screens to spatial glass hardware.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl relative group hover:border-cyan-500/50 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-4">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Decentralized Mesh</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Zero central point of failure. State synchronization distributed peer-to-peer across webRTC tunnels.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl relative group hover:border-pink-500/50 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-xl mb-4">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Zero-Knowledge Guard</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Client-side cryptographic proofs ensure telemetry data remains encrypted prior to cloud dispatch.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 8: LAUNCH TERMINAL ================= -->
+        <section id="slide-7" class="slide flex items-center justify-center px-4 relative">
+            <div class="max-w-4xl mx-auto w-full text-center z-10 space-y-8 glass-panel p-10 md:p-14 rounded-3xl border border-cyan-500/30 shadow-2xl">
+                <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center text-white text-3xl shadow-xl shadow-cyan-500/30 animate-bounce">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+
+                <div class="space-y-3">
+                    <span class="text-cyan-400 font-mono text-sm tracking-widest">// 08 INITIALIZE</span>
+                    <h2 class="text-4xl md:text-6xl font-black">Ready For Takeoff?</h2>
+                    <p class="text-gray-400 text-base max-w-md mx-auto">Subscribe to join the next generation early-access deployment sequence.</p>
+                </div>
+
+                <!-- Interactive Newsletter Form -->
+                <form id="launch-form" onsubmit="handleLaunchSubmit(event)" class="flex flex-col md:flex-row gap-3 max-w-md mx-auto">
+                    <input type="email" required placeholder="Enter developer key / email..." class="flex-1 px-5 py-4 rounded-xl bg-gray-900 border border-gray-800 text-white font-mono text-xs focus:outline-none focus:border-cyan-400 transition-all">
+                    <button type="submit" class="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-violet-600 hover:from-cyan-300 hover:to-violet-500 text-gray-950 font-bold text-xs tracking-wider uppercase transition-all shadow-lg shadow-cyan-500/25">
+                        DISPATCH
+                    </button>
+                </form>
+
+                <div id="form-msg" class="text-xs font-mono text-emerald-400 hidden">
+                    <i class="fa-solid fa-check-circle mr-1"></i> ACCESS GRANTED // CREDENTIALS SENT TO QUEUE
+                </div>
+
+                <div class="pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs font-mono text-gray-500 gap-4">
+                    <span>© 2026 AETHERIA LABS INC. ALL RIGHTS RESERVED.</span>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-cyan-400">TWITTER</a>
+                        <a href="#" class="hover:text-cyan-400">DISCORD</a>
+                        <a href="#" class="hover:text-cyan-400">GITHUB</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UI Audio Synth & Canvas Logic -->
+    <script>
+        // Global State & Elements
+        const TOTAL_SLIDES = 8;
+        let currentSlide = 0;
+        const wrapper = document.getElementById('slides-wrapper');
+        const dotsWrapper = document.getElementById('dots-wrapper');
+        const dotTemplate = document.getElementById('dot-template');
+
+        // Setup Slide Navigation Dots
+        for (let i = 0; i < TOTAL_SLIDES; i++) {
+            const dot = dotTemplate.content.cloneNode(true).querySelector('button');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsWrapper.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.indicator-dot');
+
+        function updateActiveDot(index) {
+            dots.forEach((dot, idx) => {
+                if (idx === index) {
+                    dot.classList.add('bg-cyan-400', 'w-8');
+                    dot.classList.remove('bg-gray-700', 'w-3');
+                } else {
+                    dot.classList.remove('bg-cyan-400', 'w-8');
+                    dot.classList.add('bg-gray-700', 'w-3');
+                }
+            });
+
+            // Highlight desktop nav links
+            document.querySelectorAll('.nav-link').forEach((link, idx) => {
+                if (idx === index) {
+                    link.classList.add('text-cyan-400', 'bg-gray-800');
+                    link.classList.remove('text-gray-400');
+                } else {
+                    link.classList.remove('text-cyan-400', 'bg-gray-800');
+                    link.classList.add('text-gray-400');
+                }
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            const targetSlide = document.getElementById(`slide-${index}`);
+            targetSlide.scrollIntoView({ behavior: 'smooth' });
+            updateActiveDot(index);
+            triggerSlideEvents(index);
+        }
+
+        // Intersection Observer for Slide Scroll Detection
+        const observerOptions = {
+            root: wrapper,
+            threshold: 0.6
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const index = parseInt(slideId.replace('slide-', ''));
+                    currentSlide = index;
+                    updateActiveDot(index);
+                    triggerSlideEvents(index);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => slideObserver.observe(slide));
+
+        // Slide Trigger Specific Logic (Counters, Typewriter, etc.)
+        let countersAnimated = false;
+        function triggerSlideEvents(index) {
+            // Slide 3 Typewriter effect
+            if (index === 2) {
+                runTypewriter();
+            }
+            // Slide 6 Counter Animation
+            if (index === 5 && !countersAnimated) {
+                animateCounters();
+                countersAnimated = true;
+            }
+        }
+
+        // Background Starfield/Particle Canvas
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.z = Math.random() * width;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.color = Math.random() > 0.5 ? '#22d3ee' : '#8b5cf6';
+                this.speed = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.random() * 0.5 + 0.3;
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 120 }, () => new Particle());
+
+        function animateBg() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Subtle Grid Lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+            ctx.lineWidth = 1;
+            const gridSize = 60;
+            for (let x = 0; x < width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // Draw particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // 3D Parallax Tilt Card Effect (Slide 2)
+        const tiltCard = document.getElementById('tilt-card-1');
+        if (tiltCard) {
+            tiltCard.addEventListener('mousemove', (e) => {
+                const rect = tiltCard.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                tiltCard.style.transform = `rotateY(${x * 0.08}deg) rotateX(${-y * 0.08}deg)`;
+            });
+            tiltCard.addEventListener('mouseleave', () => {
+                tiltCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+
+        // Slide 3 Typewriter
+        const typeText = "SYNATAPSE PROTOCOL READY. QUERYING QUANTUM NODES... ALL SYSTEMS OPTIMAL.";
+        let typeIdx = 0;
+        let isTyping = false;
+        function runTypewriter() {
+            const target = document.getElementById('typewriter-text');
+            if (isTyping || !target) return;
+            target.innerHTML = '';
+            typeIdx = 0;
+            isTyping = true;
+
+            const interval = setInterval(() => {
+                if (typeIdx < typeText.length) {
+                    target.innerHTML += typeText.charAt(typeIdx);
+                    typeIdx++;
+                } else {
+                    clearInterval(interval);
+                    isTyping = false;
+                }
+            }, 30);
+        }
+
+        // Slide 4 Quantum Grid Node Generator
+        const qContainer = document.getElementById('quantum-nodes');
+        for (let i = 1; i <= 8; i++) {
+            const node = document.createElement('div');
+            node.className = "glass-card p-6 rounded-2xl flex flex-col justify-between h-36 cursor-pointer border border-gray-800 hover:border-cyan-400 group transition-all";
+            node.innerHTML = `
+                <div class="flex justify-between items-center text-xs font-mono text-gray-500">
+                    <span>NODE 0${i}</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping"></span>
+                </div>
+                <div class="text-xl font-bold font-mono group-hover:text-cyan-400 transition-colors">Q-${Math.floor(100 + Math.random() * 900)}</div>
+                <div class="text-xs text-gray-400 font-mono">RESONANCE: <span class="text-violet-400">${(Math.random() * 10).toFixed(2)} GHz</span></div>
+            `;
+            node.onclick = () => {
+                node.classList.add('scale-95');
+                setTimeout(() => node.classList.remove('scale-95'), 150);
+                playSynthTone(200 + i * 50);
+            };
+            qContainer.appendChild(node);
+        }
+
+        // Slide 5 Interactive Visualizer Canvas
+        const vCanvas = document.getElementById('visualizer-canvas');
+        if (vCanvas) {
+            const vCtx = vCanvas.getContext('2d');
+            let mouseX = 0;
+
+            function resizeVCanvas() {
+                vCanvas.width = vCanvas.offsetWidth;
+                vCanvas.height = vCanvas.offsetHeight;
+            }
+            resizeVCanvas();
+            window.addEventListener('resize', resizeVCanvas);
+
+            vCanvas.addEventListener('mousemove', (e) => {
+                const rect = vCanvas.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                const freq = Math.floor((mouseX / vCanvas.width) * 880 + 110);
+                document.getElementById('freq-val').innerText = `${freq} Hz`;
+                if (audioCtx && audioActive) {
+                    setSynthFreq(freq);
+                }
+            });
+
+            function renderWaveform() {
+                vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
+                vCtx.lineWidth = 3;
+                vCtx.strokeStyle = '#22d3ee';
+                vCtx.beginPath();
+
+                const sliceWidth = vCanvas.width / 100;
+                let x = 0;
+                const time = Date.now() * 0.005;
+
+                for (let i = 0; i < 100; i++) {
+                    const v = Math.sin(i * 0.1 + time + (mouseX * 0.01)) * 30;
+                    const y = vCanvas.height / 2 + v;
+
+                    if (i === 0) vCtx.moveTo(x, y);
+                    else vCtx.lineTo(x, y);
+
+                    x += sliceWidth;
+                }
+
+                vCtx.stroke();
+                requestAnimationFrame(renderWaveform);
+            }
+            renderWaveform();
+        }
+
+        // Slide 6 Metric Counters
+        function animateCounters() {
+            const countUp = (id, target) => {
+                let current = 0;
+                const step = Math.ceil(target / 50);
+                const el = document.getElementById(id);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        el.innerText = target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        el.innerText = current.toLocaleString();
+                    }
+                }, 30);
+            };
+
+            countUp('counter-1', 94820);
+            countUp('counter-2', 1024);
+            countUp('counter-3', 840);
+            countUp('counter-4', 99.9);
+
+            // Live terminal log stream simulator
+            const logs = [
+                "Encrypting packet payload via AES-GCM-256...",
+                "Peer handshakes verified across region us-east-1.",
+                "Sub-atomic state sync complete [delta < 0.01ms].",
+                "Neural predictive weights updated automatically."
+            ];
+            const term = document.getElementById('log-terminal');
+            let logIdx = 0;
+            setInterval(() => {
+                const logItem = document.createElement('div');
+                const timestamp = new Date().toISOString().substr(11, 8);
+                logItem.innerText = `[${timestamp}] ${logs[logIdx % logs.length]}`;
+                term.appendChild(logItem);
+                term.scrollTop = term.scrollHeight;
+                logIdx++;
+            }, 3000);
+        }
+
+        // Audio Synth Context (Web Audio API - Pure JS Sound Generation)
+        let audioCtx = null;
+        let oscillator = null;
+        let gainNode = null;
+        let audioActive = false;
+
+        function initAudio() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            oscillator = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+        }
+
+        function toggleAudioSynth() {
+            if (!audioCtx) initAudio();
+
+            audioActive = !audioActive;
+            const icon = document.getElementById('sound-icon');
+            const text = document.getElementById('sound-text');
+
+            if (audioActive) {
+                audioCtx.resume();
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                icon.className = "fa-solid fa-volume-high";
+                text.innerText = "AUDIO ON";
+            } else {
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                icon.className = "fa-solid fa-volume-xmark";
+                text.innerText = "AUDIO OFF";
+            }
+        }
+
+        function setSynthFreq(freq) {
+            if (oscillator && audioCtx) {
+                oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            }
+        }
+
+        function playSynthTone(freq) {
+            if (!audioActive) return;
+            const tempOsc = audioCtx.createOscillator();
+            const tempGain = audioCtx.createGain();
+            tempOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            tempGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            tempGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            tempOsc.connect(tempGain);
+            tempGain.connect(audioCtx.destination);
+            tempOsc.start();
+            tempOsc.stop(audioCtx.currentTime + 0.4);
+        }
+
+        // Trigger Hologram Ripple Flash
+        function triggerHologramEffect() {
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-cyan-400/10 z-50 pointer-events-none transition-opacity duration-500 opacity-100';
+            document.body.appendChild(overlay);
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.remove(), 500);
+            }, 100);
+        }
+
+        // Handle Launch Form Submit
+        function handleLaunchSubmit(e) {
+            e.preventDefault();
+            const msg = document.getElementById('form-msg');
+            msg.classList.remove('hidden');
+            e.target.reset();
+        }
+
+        // Keyboard Arrow Navigation Support
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                if (currentSlide < TOTAL_SLIDES - 1) goToSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                if (currentSlide > 0) goToSlide(currentSlide - 1);
+            }
+        });
+
+        // Initialize Active Indicator on Load
+        updateActiveDot(0);
+    </script>
+</body>
+</html>
