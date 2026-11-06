@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMINA // The Art & Science of Theatre Lighting</title>
+    <title>Lighting and Theatre | The Art of Stage Illumination</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,36 +12,30 @@
             theme: {
                 extend: {
                     colors: {
-                        amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-                        gold: { 400: '#facc15', 500: '#eab308' },
-                        stage: { 950: '#06060a', 900: '#0d0d14', 800: '#141420' }
+                        gold: {
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        velvet: {
+                            950: '#0a0507',
+                            900: '#14080c',
+                            800: '#260e15',
+                            700: '#421420',
+                        }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                        mono: ['JetBrains Mono', 'monospace']
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'beam-sweep': 'beam 8s ease-in-out infinite alternate',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-12px) rotate(1deg)' },
-                        },
-                        beam: {
-                            '0%': { transform: 'rotate(-15deg)' },
-                            '100%': { transform: 'rotate(15deg)' }
-                        }
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Cinzel', 'Playfair Display', 'serif'],
+                        mono: ['Cormorant Garamond', 'serif']
                     }
                 }
             }
         }
     </script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -50,41 +44,37 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            background-color: #050508;
+            background-color: #080406;
             color: #f3f4f6;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             scroll-behavior: smooth;
         }
 
-        /* Glassmorphism utility */
-        .glass-panel {
-            background: rgba(18, 18, 28, 0.65);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(251, 191, 36, 0.12);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        /* Cinematic Velvet & Gold Glass Panels */
+        .theatre-panel {
+            background: linear-gradient(135deg, rgba(26, 12, 18, 0.75) 0%, rgba(12, 5, 8, 0.85) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(234, 179, 8, 0.18);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
+        .theatre-card {
+            background: rgba(255, 255, 255, 0.025);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(234, 179, 8, 0.12);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .glass-card:hover {
-            border-color: rgba(251, 191, 36, 0.4);
-            box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.3);
+        .theatre-card:hover {
+            border-color: rgba(234, 179, 8, 0.45);
+            box-shadow: 0 12px 35px -10px rgba(234, 179, 8, 0.25);
             transform: translateY(-4px);
         }
 
-        /* Gold and Amber Glow Effects */
-        .text-glow-amber {
-            text-shadow: 0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(217, 119, 6, 0.3);
-        }
-
-        .glow-box-amber {
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);
+        /* Subtle Gold Shimmer & Text Glows */
+        .text-gold-glow {
+            text-shadow: 0 0 25px rgba(234, 179, 8, 0.4), 0 0 50px rgba(202, 138, 4, 0.2);
         }
 
         /* Slide Snapping */
@@ -106,7 +96,7 @@
             position: relative;
         }
 
-        /* Background Canvas */
+        /* Dynamic Canvas Layer */
         .canvas-bg {
             position: fixed;
             top: 0;
@@ -117,55 +107,57 @@
             pointer-events: none;
         }
 
-        /* Spotlights Overlay */
+        /* Dynamic Interactive Stage Spotlight */
         .spotlight-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(251, 191, 36, 0.15) 0%, rgba(5, 5, 8, 0.95) 60%);
+            background: radial-gradient(circle 450px at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(253, 224, 71, 0.08) 0%, rgba(8, 4, 6, 0.94) 75%);
             pointer-events: none;
-            transition: background 0.05s ease-out;
+            transition: background 0.08s ease-out;
+        }
+
+        /* Ornamental Flourish divider */
+        .gold-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(234, 179, 8, 0.5) 50%, transparent 100%);
         }
     </style>
 </head>
-<body class="select-none dark bg-stage-950">
+<body class="select-none dark bg-velvet-950">
 
-    <!-- Stage Lighting & Dust Particles Canvas -->
+    <!-- Stage Lighting & Atmosphere Canvas -->
     <canvas id="bg-canvas" class="canvas-bg"></canvas>
     
-    <!-- Dynamic Follow Spotlight Overlay -->
+    <!-- Dynamic Stage Spotlight Following Cursor -->
     <div id="spotlight-layer" class="spotlight-overlay z-0"></div>
 
     <!-- Header Navigation -->
-    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass-panel border-b-0 rounded-b-2xl mx-4 mt-2">
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 theatre-panel border-b-0 rounded-b-3xl mx-4 mt-2">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="goToSlide(0)">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-700 flex items-center justify-center font-bold text-gray-950 shadow-lg shadow-amber-500/30">
-                <i class="fa-solid fa-lightbulb text-lg"></i>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-gold-600 via-gold-500 to-amber-300 flex items-center justify-center text-velvet-950 font-bold shadow-lg shadow-gold-500/20">
+                <i class="fa-solid fa-masks-theater text-lg"></i>
             </div>
             <div>
-                <span class="font-extrabold text-lg tracking-widest bg-gradient-to-r from-amber-300 via-amber-500 to-yellow-600 bg-clip-text text-transparent block leading-none">LUMINA</span>
-                <span class="font-mono text-[10px] text-amber-500/80 tracking-wider">STAGE LIGHTING ARCHITECTURE</span>
+                <span class="font-serif font-bold text-lg tracking-widest bg-gradient-to-r from-amber-200 via-gold-400 to-yellow-600 bg-clip-text text-transparent block leading-none">THEATRE ROYAL</span>
+                <span class="font-serif italic text-[11px] text-gold-400/80 tracking-wider">Illumination & Atmosphere</span>
             </div>
         </div>
 
-        <!-- Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-1 font-mono text-xs text-gray-400 bg-stage-900/80 p-1.5 rounded-full border border-gray-800/80">
-            <button onclick="goToSlide(0)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">01 // PROLOGUE</button>
-            <button onclick="goToSlide(1)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">02 // POWER & ROLE</button>
-            <button onclick="goToSlide(2)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">03 // PROPERTIES</button>
-            <button onclick="goToSlide(3)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">04 // FIXTURES</button>
-            <button onclick="goToSlide(4)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">05 // COLOR LAB</button>
-            <button onclick="goToSlide(5)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">06 // WORKFLOW</button>
-            <button onclick="goToSlide(6)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">07 // DMX BOARD</button>
-            <button onclick="goToSlide(7)" class="nav-link px-3 py-1.5 rounded-full hover:text-amber-400 transition-all">08 // FINALE</button>
+        <!-- Clean Navigation Links -->
+        <nav class="hidden lg:flex items-center space-x-2 font-serif text-xs text-gray-300 bg-velvet-900/90 px-4 py-2 rounded-full border border-gold-500/20">
+            <button onclick="goToSlide(0)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act I</button>
+            <button onclick="goToSlide(1)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act II</button>
+            <button onclick="goToSlide(2)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act III</button>
+            <button onclick="goToSlide(3)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act IV</button>
+            <button onclick="goToSlide(4)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act V</button>
+            <button onclick="goToSlide(5)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act VI</button>
+            <button onclick="goToSlide(6)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act VII</button>
+            <button onclick="goToSlide(7)" class="nav-link px-3 py-1 rounded-full hover:text-gold-400 transition-all">Act VIII</button>
         </nav>
 
-        <div class="flex items-center space-x-3">
-            <button id="sound-btn" onclick="toggleAudioSynth()" class="px-3 py-1.5 rounded-full border border-amber-500/40 text-amber-400 hover:bg-amber-500/10 text-xs font-mono flex items-center space-x-2 transition-all">
-                <i class="fa-solid fa-volume-xmark" id="sound-icon"></i>
-                <span id="sound-text">STAGE CUES OFF</span>
-            </button>
-            <button onclick="goToSlide(6)" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-gray-950 font-bold text-xs tracking-wide shadow-lg shadow-amber-500/30 transition-all transform hover:scale-105">
-                CONSOLE LIVE
+        <div class="flex items-center space-x-4">
+            <button onclick="goToSlide(1)" class="px-5 py-2 rounded-full bg-gradient-to-r from-gold-500 to-amber-600 hover:from-gold-400 hover:to-gold-500 text-velvet-950 font-serif font-bold text-xs tracking-wider uppercase shadow-lg shadow-gold-500/25 transition-all transform hover:scale-105">
+                Explore Core Essay
             </button>
         </div>
     </header>
@@ -173,134 +165,133 @@
     <!-- Side Navigation Dots -->
     <div class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col space-y-3">
         <template id="dot-template">
-            <button class="indicator-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-700 transition-all duration-300 hover:scale-125 hover:bg-amber-400 focus:outline-none" aria-label="Go to slide"></button>
+            <button class="indicator-dot w-3 h-3 rounded-full bg-gray-800 border border-gold-500/30 transition-all duration-300 hover:scale-125 hover:bg-gold-400 focus:outline-none" aria-label="Go to slide"></button>
         </template>
-        <div id="dots-wrapper" class="flex flex-col space-y-3 glass-panel p-2 rounded-full border border-gray-800/80"></div>
+        <div id="dots-wrapper" class="flex flex-col space-y-3 theatre-panel p-2.5 rounded-full"></div>
     </div>
 
     <!-- Main Slides Container -->
     <main id="slides-wrapper" class="slides-container relative z-10">
 
-        <!-- ================= SLIDE 1: HERO / TITLE ================= -->
+        <!-- ================= SLIDE 1: TITLE SLIDE ================= -->
         <section id="slide-0" class="slide flex items-center justify-center px-4 relative overflow-hidden">
-            <div class="max-w-5xl mx-auto text-center z-10 space-y-8 pt-16">
-                <div class="inline-flex items-center space-x-3 px-4 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-300 font-mono text-xs tracking-widest uppercase animate-pulse">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
-                    <span>ACT I: ILLUMINATING THE STAGE</span>
+            <div class="max-w-5xl mx-auto text-center z-10 space-y-8 pt-12">
+                <div class="inline-flex items-center space-x-3 px-5 py-2 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 font-serif text-xs tracking-widest uppercase">
+                    <span class="w-2 h-2 rounded-full bg-gold-400 shadow-lg shadow-gold-400 animate-pulse"></span>
+                    <span>An Architectural & Visual Exploration</span>
                 </div>
                 
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight leading-tight text-gray-100">
-                    THE ART & SCIENCE OF <br>
-                    <span class="bg-gradient-to-r from-amber-300 via-amber-500 to-yellow-600 bg-clip-text text-transparent text-glow-amber">THEATRE LIGHTING</span>
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-serif font-extrabold tracking-tight leading-tight text-gray-100">
+                    Lighting and <br>
+                    <span class="bg-gradient-to-r from-amber-100 via-gold-400 to-amber-600 bg-clip-text text-transparent text-gold-glow">Theatre</span>
                 </h1>
 
-                <p class="max-w-2xl mx-auto text-gray-400 text-base md:text-xl font-light leading-relaxed">
-                    Transforming blank wooden stages into living dimensions of visual drama, narrative focus, atmospheric magic, and emotional power.
+                <div class="w-32 h-0.5 mx-auto gold-divider"></div>
+
+                <p class="max-w-2xl mx-auto text-gray-300 text-lg md:text-2xl font-serif italic leading-relaxed">
+                    "Shaping mood, time, space, and the audience's focus upon the living stage."
                 </p>
 
-                <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                    <button onclick="goToSlide(1)" class="px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-gray-950 font-bold text-xs tracking-widest uppercase hover:from-amber-400 hover:to-amber-500 transition-all shadow-xl shadow-amber-500/30 flex items-center space-x-3 group">
-                        <span>Begin Exploration</span>
-                        <i class="fa-solid fa-arrow-down transform group-hover:translate-y-1 transition-transform"></i>
-                    </button>
-                    <button onclick="triggerStageCueFlash()" class="px-8 py-4 rounded-xl glass-card text-amber-300 font-semibold text-xs tracking-widest uppercase hover:bg-amber-500/10 transition-all border border-amber-500/30 flex items-center space-x-2">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Fire Cue 01 (Flash)</span>
+                <div class="flex flex-wrap items-center justify-center gap-5 pt-4">
+                    <button onclick="goToSlide(1)" class="px-9 py-4 rounded-full bg-gradient-to-r from-gold-500 via-amber-500 to-amber-600 text-velvet-950 font-serif font-bold text-xs tracking-widest uppercase hover:from-gold-400 hover:to-gold-500 transition-all shadow-xl shadow-gold-500/25 flex items-center space-x-3 group">
+                        <span>Begin Overture</span>
+                        <i class="fa-solid fa-chevron-down transform group-hover:translate-y-1 transition-transform"></i>
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- ================= SLIDE 2: THE POWER & ESSENCE OF LIGHTING ================= -->
+        <!-- ================= SLIDE 2: COMPLETE ESSAY & ESSENCE ================= -->
         <section id="slide-1" class="slide flex items-center justify-center px-4 py-20 relative">
             <div class="max-w-6xl mx-auto w-full z-10 space-y-8 overflow-y-auto max-h-[85vh] pr-2">
                 
                 <!-- Section Header -->
-                <div class="border-b border-amber-500/20 pb-4">
-                    <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 02 THE POWER OF THEATRE LIGHTING</span>
-                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100 mt-1">The Essence & Career Impact</h2>
+                <div class="border-b border-gold-500/20 pb-4 text-center md:text-left">
+                    <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act II — The Essential Core</span>
+                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100 mt-1">The Power & Craft of Stage Lighting</h2>
                 </div>
 
-                <!-- Main Narrative Box (User Text Segment 1) -->
-                <div class="glass-panel p-6 md:p-8 rounded-3xl border-l-4 border-l-amber-500 space-y-4 relative">
-                    <div class="absolute -top-4 right-8 px-3 py-1 bg-amber-500/20 border border-amber-500/40 rounded-full text-amber-300 font-mono text-[10px]">
-                        CORE PHILOSOPHY
+                <!-- Main Essay Block Quote -->
+                <div class="theatre-panel p-8 md:p-10 rounded-3xl relative space-y-6">
+                    <div class="absolute -top-3 left-8 px-4 py-1 bg-gradient-to-r from-gold-600 to-amber-600 rounded-full text-velvet-950 font-serif font-bold text-[10px] tracking-widest uppercase shadow-md">
+                        The Designer's Vision
                     </div>
-                    <p class="text-gray-200 leading-relaxed text-base md:text-lg font-serif italic">
-                        "Lighting is an essential part of a theatre career. It helps illuminate the performance of an act, which helps to shape mood, time, space, and the audience's focus. Light is not just a technical requirement, its something that makes the stage visible, something that makes a show creative, show depth, atmosphere, power and director's vision. These lights aren't just some side parts; they are some of the most important parts. Its like a plot in a show, it connects everything together and gives a show its shine. Practically, light ensures visibility and helps audience distinguish between actors, sets and action but artistically, it shows visual environment, style of art, and brings the show to life."
+
+                    <p class="text-gray-100 leading-relaxed text-base md:text-lg font-serif italic">
+                        Lighting is an essential part of a theatre career. It helps illuminate the performance of an act, which helps to shape mood, time, space, and the audience's focus. Light is not just a technical requirement, its something that makes the stage visible, something that makes a show creative, show depth, atmosphere, power and director's vision. These lights aren't just some side parts; they are some of the most important parts. Its like a plot in a show, it connects everything together and gives a show its sh9ine. Practically, light ensures visibility and helps audience distinguish between actors, sets and action but artistically, it shows visual environment, style of art, and brings the show to life.
                     </p>
                 </div>
 
-                <!-- Designer Work Responsibilities -->
-                <div class="space-y-3">
-                    <h3 class="text-lg font-mono text-amber-400 flex items-center space-x-2">
+                <!-- Designer Responsibilities -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-serif font-bold text-gold-400 flex items-center space-x-3">
                         <i class="fa-solid fa-sliders"></i>
-                        <span>DESIGNER PARAMETER TRIAD</span>
+                        <span>The Designer's Core Work</span>
                     </h3>
-                    <p class="text-gray-400 text-sm">The lighting designer orchestrates three fundamental variables across all stage cues:</p>
+                    <p class="text-gray-300 text-sm font-serif italic">The designer has a lot of work like Angle of Light, Intensity (brightness), Form (spotlight or washlight):</p>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                        <div class="glass-card p-5 rounded-2xl border-t-2 border-t-amber-400 space-y-2">
-                            <span class="text-amber-400 font-mono text-xs font-bold">01 // ANGLE OF LIGHT</span>
-                            <p class="text-gray-300 text-sm">Key light, side wash, backlight, downlight—sculpting actor dimensions and shadows.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="theatre-card p-6 rounded-2xl space-y-2 border-t-2 border-t-gold-400">
+                            <span class="text-gold-400 font-serif text-xs font-bold uppercase tracking-wider block">Angle of Light</span>
+                            <p class="text-gray-300 text-sm">Sculpts shadows, highlights physical form, and establishes dimensional depth across the stage floor.</p>
                         </div>
-                        <div class="glass-card p-5 rounded-2xl border-t-2 border-t-yellow-400 space-y-2">
-                            <span class="text-yellow-400 font-mono text-xs font-bold">02 // INTENSITY (BRIGHTNESS)</span>
-                            <p class="text-gray-300 text-sm">From pin-drop 1% blackout creeps to 100% full stage blinding climactic surges.</p>
+                        <div class="theatre-card p-6 rounded-2xl space-y-2 border-t-2 border-t-amber-400">
+                            <span class="text-amber-400 font-serif text-xs font-bold uppercase tracking-wider block">Intensity (brightness)</span>
+                            <p class="text-gray-300 text-sm">Dictates visual volume from subtle dark mystery to blazing climactic brilliance.</p>
                         </div>
-                        <div class="glass-card p-5 rounded-2xl border-t-2 border-t-amber-500 space-y-2">
-                            <span class="text-amber-500 font-mono text-xs font-bold">03 // FORM (SPOT OR WASH)</span>
-                            <p class="text-gray-300 text-sm">Hard-edged profile cutouts vs soft-edged flood washes across scenic drops.</p>
+                        <div class="theatre-card p-6 rounded-2xl space-y-2 border-t-2 border-t-yellow-500">
+                            <span class="text-yellow-500 font-serif text-xs font-bold uppercase tracking-wider block">Form (spotlight or washlight)</span>
+                            <p class="text-gray-300 text-sm">Defines crisp, sharp cutouts versus broad, atmospheric washes across scenic elements.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Core Function Grids (User Text Segment 2) -->
-                <div class="space-y-4">
-                    <h3 class="text-xl font-serif font-bold text-gray-100 flex items-center space-x-2">
-                        <i class="fa-solid fa-layer-group text-amber-400"></i>
-                        <span>5 Core Functions of Stage Lighting</span>
+                <!-- Core Functions Grid -->
+                <div class="space-y-4 pt-2">
+                    <h3 class="text-xl font-serif font-bold text-gray-100 flex items-center space-x-3">
+                        <i class="fa-solid fa-gem text-gold-400"></i>
+                        <span>Core Function Includes</span>
                     </h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="glass-card p-5 rounded-2xl space-y-2">
-                            <div class="flex items-center space-x-2 text-amber-400 font-bold text-base">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div class="theatre-card p-6 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-3 text-gold-400 font-serif font-bold text-base">
                                 <i class="fa-solid fa-eye"></i>
                                 <span>Visibility</span>
                             </div>
-                            <p class="text-gray-300 text-sm">Ensures that people can see the actor's face, expression and actions properly.</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Ensures that people can see the actor's face, expression and actions properly.</p>
                         </div>
 
-                        <div class="glass-card p-5 rounded-2xl space-y-2">
-                            <div class="flex items-center space-x-2 text-amber-400 font-bold text-base">
+                        <div class="theatre-card p-6 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-3 text-gold-400 font-serif font-bold text-base">
                                 <i class="fa-solid fa-masks-theater"></i>
-                                <span>Mood & Atmosphere</span>
+                                <span>Mood and Atmosphere</span>
                             </div>
-                            <p class="text-gray-300 text-sm">Sets the tone for the show using warm/cold colours lights and hues.</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Sets the tone for the show using warm/cold colours lights and hues.</p>
                         </div>
 
-                        <div class="glass-card p-5 rounded-2xl space-y-2">
-                            <div class="flex items-center space-x-2 text-amber-400 font-bold text-base">
-                                <i class="fa-solid fa-clock"></i>
-                                <span>Time & Place</span>
+                        <div class="theatre-card p-6 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-3 text-gold-400 font-serif font-bold text-base">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                <span>Time and Place</span>
                             </div>
-                            <p class="text-gray-300 text-sm">Helps to make a show look old, modern and change places seamlessly.</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Helps to make a show look old, modern and change places.</p>
                         </div>
 
-                        <div class="glass-card p-5 rounded-2xl space-y-2">
-                            <div class="flex items-center space-x-2 text-amber-400 font-bold text-base">
-                                <i class="fa-solid fa-cube"></i>
+                        <div class="theatre-card p-6 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-3 text-gold-400 font-serif font-bold text-base">
+                                <i class="fa-solid fa-cubes"></i>
                                 <span>Depth</span>
                             </div>
-                            <p class="text-gray-300 text-sm">Gives depth to items and actors in the scene, preventing flat stage visuals.</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Gives depth to items and actors in the scene.</p>
                         </div>
 
-                        <div class="glass-card p-5 rounded-2xl space-y-2 md:col-span-2 lg:col-span-2">
-                            <div class="flex items-center space-x-2 text-amber-400 font-bold text-base">
+                        <div class="theatre-card p-6 rounded-2xl space-y-2 md:col-span-2 lg:col-span-2">
+                            <div class="flex items-center space-x-3 text-gold-400 font-serif font-bold text-base">
                                 <i class="fa-solid fa-scale-balanced"></i>
                                 <span>Balance</span>
                             </div>
-                            <p class="text-gray-300 text-sm">Maintains the tempo and other parts of the show, while may look small, many of those small details make a show good.</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Maintains the tempo and other parts of the show, while may look small, many of those small details make a show good.</p>
                         </div>
                     </div>
                 </div>
@@ -308,292 +299,73 @@
             </div>
         </section>
 
-        <!-- ================= SLIDE 3: PROPERTIES OF STAGE LIGHT ================= -->
+        <!-- ================= SLIDE 3: PLACEHOLDER ================= -->
         <section id="slide-2" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
-                <div>
-                    <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 03 CONTROLLABLE PROPERTIES</span>
-                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100 mt-1">Four Pillars of Light Modulation</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="glass-panel p-6 rounded-3xl space-y-4 hover:border-amber-400/50 transition-all">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
-                            <i class="fa-solid fa-[#]">1</i>
-                        </div>
-                        <h3 class="text-xl font-bold">Intensity</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">Controlled via dimmers from 0% to 100%. Dictates focus, energy, and time-of-day dynamics.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl space-y-4 hover:border-amber-400/50 transition-all">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
-                            <i class="fa-solid fa-palette"></i>
-                        </div>
-                        <h3 class="text-xl font-bold">Color</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">Generated via physical gel filters or LED mixing (RGBW). Establishes emotional psychology.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl space-y-4 hover:border-amber-400/50 transition-all">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
-                            <i class="fa-solid fa-shapes"></i>
-                        </div>
-                        <h3 class="text-xl font-bold">Form & Distribution</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">The shape, sharpness, and beam angle of the beam using shutters, gobos, and diffusion lenses.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl space-y-4 hover:border-amber-400/50 transition-all">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
-                            <i class="fa-solid fa-arrows-up-down-left-right"></i>
-                        </div>
-                        <h3 class="text-xl font-bold">Movement</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">Live manual follow-spot pan/tilt or automated robotic cue sweeps across the stage grid.</p>
-                    </div>
-                </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act III</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Scene in Progress</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-400 font-serif italic text-base">Reserved for future theatrical design studies.</p>
             </div>
         </section>
 
-        <!-- ================= SLIDE 4: TYPES OF STAGE FIXTURES ================= -->
+        <!-- ================= SLIDE 4: PLACEHOLDER ================= -->
         <section id="slide-3" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
-                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-800 pb-4">
-                    <div>
-                        <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 04 HARDWARE RIGGING</span>
-                        <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100 mt-1">Essential Theatre Fixtures</h2>
-                    </div>
-                    <p class="text-gray-400 text-sm max-w-sm">Select a fixture type below to inspect beam output characteristics.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="fixture-selector">
-                    <button onclick="selectFixture('fresnel')" class="fixture-btn glass-panel p-6 rounded-2xl text-left border-amber-500 transition-all active-fixture">
-                        <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-sun"></i></div>
-                        <h4 class="font-bold text-lg">Fresnel</h4>
-                        <p class="text-gray-400 text-xs mt-1">Soft-edged wash light with concentric lens rings. Ideal for blend washes.</p>
-                    </button>
-
-                    <button onclick="selectFixture('profile')" class="fixture-btn glass-panel p-6 rounded-2xl text-left hover:border-amber-500/50 transition-all">
-                        <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-bullseye"></i></div>
-                        <h4 class="font-bold text-lg">Profile / ERS</h4>
-                        <p class="text-gray-400 text-xs mt-1">Crisp hard-edged beam equipped with framing shutters and gobo slots.</p>
-                    </button>
-
-                    <button onclick="selectFixture('par')" class="fixture-btn glass-panel p-6 rounded-2xl text-left hover:border-amber-500/50 transition-all">
-                        <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-lightbulb"></i></div>
-                        <h4 class="font-bold text-lg">PAR Can</h4>
-                        <p class="text-gray-400 text-xs mt-1">High-intensity oval punch beam. Workhorse of rock theatre & color washes.</p>
-                    </button>
-
-                    <button onclick="selectFixture('mover')" class="fixture-btn glass-panel p-6 rounded-2xl text-left hover:border-amber-500/50 transition-all">
-                        <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-[#]">M</i></div>
-                        <h4 class="font-bold text-lg">Moving Head</h4>
-                        <p class="text-gray-400 text-xs mt-1">Automated pan/tilt robotic spot fixture with motorized focus & prism effects.</p>
-                    </button>
-                </div>
-
-                <!-- Live Beam Preview Container -->
-                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="space-y-3 max-w-md">
-                        <span class="text-amber-400 font-mono text-xs">SELECTED FIXTURE DATA</span>
-                        <h3 id="fixture-title" class="text-2xl font-bold font-serif">Fresnel Spotlight</h3>
-                        <p id="fixture-desc" class="text-gray-300 text-sm leading-relaxed">Produces a soft, diffused beam of light. Great for area lighting where soft edges are required so adjacent beams blend seamlessly without harsh lines.</p>
-                    </div>
-
-                    <!-- Beam Graphic Simulation -->
-                    <div class="w-full md:w-1/2 h-44 bg-stage-900 rounded-2xl border border-gray-800 relative flex items-center justify-center overflow-hidden">
-                        <div id="fixture-beam-graphic" class="w-32 h-full bg-gradient-to-b from-amber-400/80 via-amber-500/30 to-transparent blur-md transform origin-top transition-all duration-500"></div>
-                        <div class="absolute bottom-4 font-mono text-[10px] text-gray-500">BEAM PROFILE SIMULATION</div>
-                    </div>
-                </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act IV</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Scene in Progress</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-400 font-serif italic text-base">Reserved for future theatrical design studies.</p>
             </div>
         </section>
 
-        <!-- ================= SLIDE 5: COLOR THEORY & GEL LAB ================= -->
+        <!-- ================= SLIDE 5: PLACEHOLDER ================= -->
         <section id="slide-4" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
-                <div class="text-center space-y-2">
-                    <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 05 COLOR CHROMATICS</span>
-                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100">Stage Gel & Color Mixing Lab</h2>
-                    <p class="text-gray-400 text-sm max-w-md mx-auto">Adjust RGBW color channels to see how warm key lights and cool fill lights shape stage atmosphere.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <!-- Controls -->
-                    <div class="glass-panel p-6 rounded-3xl space-y-6">
-                        <div class="space-y-2">
-                            <div class="flex justify-between font-mono text-xs">
-                                <span class="text-red-400">RED CHANNEL</span>
-                                <span id="r-val" class="text-gray-400">255</span>
-                            </div>
-                            <input type="range" id="slider-r" min="0" max="255" value="245" oninput="updateGelColor()" class="w-full accent-red-500 cursor-pointer">
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex justify-between font-mono text-xs">
-                                <span class="text-green-400">GREEN CHANNEL</span>
-                                <span id="g-val" class="text-gray-400">158</span>
-                            </div>
-                            <input type="range" id="slider-g" min="0" max="255" value="158" oninput="updateGelColor()" class="w-full accent-green-500 cursor-pointer">
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex justify-between font-mono text-xs">
-                                <span class="text-blue-400">BLUE CHANNEL</span>
-                                <span id="b-val" class="text-gray-400">11</span>
-                            </div>
-                            <input type="range" id="slider-b" min="0" max="255" value="11" oninput="updateGelColor()" class="w-full accent-blue-500 cursor-pointer">
-                        </div>
-
-                        <div class="pt-4 border-t border-gray-800 flex justify-between items-center text-xs font-mono">
-                            <span class="text-gray-400">PRESET GEL FILTERS:</span>
-                            <div class="flex space-x-2">
-                                <button onclick="setGelPreset(255, 147, 41)" class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">WARM AMBER</button>
-                                <button onclick="setGelPreset(64, 156, 255)" class="px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">MOONLIGHT BLUE</button>
-                                <button onclick="setGelPreset(220, 50, 255)" class="px-2.5 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">DRAMA MAGENTA</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Visual Output Canvas -->
-                    <div class="glass-panel p-6 rounded-3xl text-center space-y-4">
-                        <div id="gel-preview-box" class="w-full h-64 rounded-2xl border border-gray-700 shadow-2xl transition-all duration-300 flex items-center justify-center relative overflow-hidden">
-                            <i class="fa-solid fa-masks-theater text-7xl text-gray-950/60"></i>
-                            <div class="absolute bottom-3 right-3 font-mono text-[10px] bg-gray-950/80 px-2 py-1 rounded text-gray-300" id="hex-display">#F59E0B</div>
-                        </div>
-                        <p class="text-gray-400 text-xs font-mono">GEL FILTER COLOR MIXING SIMULATION</p>
-                    </div>
-                </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act V</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Scene in Progress</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-400 font-serif italic text-base">Reserved for future theatrical design studies.</p>
             </div>
         </section>
 
-        <!-- ================= SLIDE 6: DESIGN WORKFLOW ================= -->
+        <!-- ================= SLIDE 6: PLACEHOLDER ================= -->
         <section id="slide-5" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-6xl mx-auto w-full z-10 space-y-8">
-                <div class="text-center space-y-2">
-                    <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 06 PRODUCTION LIFECYCLE</span>
-                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-gray-100">The Lighting Designer's Workflow</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="glass-panel p-6 rounded-3xl relative space-y-4">
-                        <div class="text-amber-400 font-mono text-sm">PHASE 01</div>
-                        <h3 class="text-xl font-bold">Script Analysis</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Reading the text for time of day, weather, emotional arcs, and practical lighting cues written by the playwright.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl relative space-y-4">
-                        <div class="text-amber-400 font-mono text-sm">PHASE 02</div>
-                        <h3 class="text-xl font-bold">Light Plot & Hookup</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Drafting 2D architectural blueprints showing fixture placement, dimmer channels, gel colors, and focus positions.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl relative space-y-4">
-                        <div class="text-amber-400 font-mono text-sm">PHASE 03</div>
-                        <h3 class="text-xl font-bold">Hang & Focus</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Electricians hang heavy fixtures on stage pipes, inserting gels and manually focusing beams onto specified stage zones.</p>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-3xl relative space-y-4">
-                        <div class="text-amber-400 font-mono text-sm">PHASE 04</div>
-                        <h3 class="text-xl font-bold">Tech Week & Cues</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Programming cue-by-cue fade times onto the lighting console in tandem with director and actor blocking.</p>
-                    </div>
-                </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act VI</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Scene in Progress</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-400 font-serif italic text-base">Reserved for future theatrical design studies.</p>
             </div>
         </section>
 
-        <!-- ================= SLIDE 7: INTERACTIVE DMX CONSOLE ================= -->
+        <!-- ================= SLIDE 7: PLACEHOLDER ================= -->
         <section id="slide-6" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-5xl mx-auto w-full z-10 space-y-6">
-                <div class="flex justify-between items-end border-b border-gray-800 pb-3">
-                    <div>
-                        <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 07 VIRTUAL DMX BOARD</span>
-                        <h2 class="text-2xl md:text-4xl font-serif font-bold text-gray-100">Live Stage Console Simulation</h2>
-                    </div>
-                    <div class="font-mono text-xs text-amber-400 flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span>DMX UNIVERSE 1: ONLINE</span>
-                    </div>
-                </div>
-
-                <!-- Console Board Card -->
-                <div class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <!-- Fader 1: Key Light Brightness -->
-                        <div class="flex flex-col items-center space-y-3">
-                            <span class="text-xs font-mono text-gray-400">KEY INTENSITY</span>
-                            <input type="range" id="fader-key" min="0" max="100" value="80" oninput="updateDMXBoard()" class="h-36 accent-amber-400 cursor-pointer [writing-mode:vertical-lr] [direction:rtl]">
-                            <span id="fader-key-val" class="font-mono text-xs text-amber-400">80%</span>
-                        </div>
-
-                        <!-- Fader 2: Stage Haze Density -->
-                        <div class="flex flex-col items-center space-y-3">
-                            <span class="text-xs font-mono text-gray-400">FOG / HAZE</span>
-                            <input type="range" id="fader-haze" min="0" max="100" value="40" oninput="updateDMXBoard()" class="h-36 accent-gray-400 cursor-pointer [writing-mode:vertical-lr] [direction:rtl]">
-                            <span id="fader-haze-val" class="font-mono text-xs text-gray-300">40%</span>
-                        </div>
-
-                        <!-- Fader 3: Warm/Cool Color Temperature -->
-                        <div class="flex flex-col items-center space-y-3">
-                            <span class="text-xs font-mono text-gray-400">COLOR TEMP</span>
-                            <input type="range" id="fader-temp" min="0" max="100" value="70" oninput="updateDMXBoard()" class="h-36 accent-amber-500 cursor-pointer [writing-mode:vertical-lr] [direction:rtl]">
-                            <span id="fader-temp-val" class="font-mono text-xs text-amber-400">WARM</span>
-                        </div>
-
-                        <!-- Fader 4: Spot Aperture -->
-                        <div class="flex flex-col items-center space-y-3">
-                            <span class="text-xs font-mono text-gray-400">SPOT BEAM</span>
-                            <input type="range" id="fader-spot" min="10" max="100" value="50" oninput="updateDMXBoard()" class="h-36 accent-yellow-400 cursor-pointer [writing-mode:vertical-lr] [direction:rtl]">
-                            <span id="fader-spot-val" class="font-mono text-xs text-yellow-400">50deg</span>
-                        </div>
-                    </div>
-
-                    <!-- Quick Cue Preset Buttons -->
-                    <div class="pt-4 border-t border-gray-800 flex flex-wrap justify-between items-center gap-3">
-                        <span class="font-mono text-xs text-gray-400">MASTER CUE PRESETS:</span>
-                        <div class="flex space-x-2">
-                            <button onclick="applyCuePreset('dramatic')" class="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono hover:bg-amber-500/40">CUE 10: DRAMATIC SOLO</button>
-                            <button onclick="applyCuePreset('full')" class="px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 text-xs font-mono hover:bg-yellow-500/40">CUE 20: FULL STAGE WASH</button>
-                            <button onclick="applyCuePreset('blackout')" class="px-3 py-1.5 rounded-lg bg-red-950 text-red-400 border border-red-800 text-xs font-mono hover:bg-red-900">CUE 99: BLACKOUT</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act VII</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Scene in Progress</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-400 font-serif italic text-base">Reserved for future theatrical design studies.</p>
             </div>
         </section>
 
-        <!-- ================= SLIDE 8: FINALE & CURTAIN CALL ================= -->
+        <!-- ================= SLIDE 8: PLACEHOLDER ================= -->
         <section id="slide-7" class="slide flex items-center justify-center px-4 relative">
-            <div class="max-w-4xl mx-auto w-full text-center z-10 space-y-8 glass-panel p-10 md:p-14 rounded-3xl border border-amber-500/40 shadow-2xl">
-                <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-gray-950 text-3xl shadow-xl shadow-amber-500/30 animate-bounce">
-                    <i class="fa-solid fa-masks-theater"></i>
-                </div>
-
-                <div class="space-y-3">
-                    <span class="text-amber-400 font-mono text-xs tracking-widest uppercase">// 08 CURTAIN CALL</span>
-                    <h2 class="text-4xl md:text-6xl font-serif font-bold text-gray-100">Brought to Life by Light</h2>
-                    <p class="text-gray-300 text-base max-w-lg mx-auto italic font-serif">
-                        "Light is the plot line in a show—it connects actors, set, tempo, and emotion together into one glowing visual masterpiece."
-                    </p>
-                </div>
-
-                <div class="flex justify-center gap-4 pt-2">
-                    <button onclick="goToSlide(0)" class="px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-gray-950 font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-amber-500/30">
-                        REPLAY PRESENTATION
-                    </button>
-                </div>
-
-                <div class="pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs font-mono text-gray-500 gap-4">
-                    <span>THEATRE LIGHTING ARCHITECTURE // EDUCATIONAL EXPERIENCE</span>
-                    <div class="flex space-x-4">
-                        <span class="text-amber-400">DESIGNED FOR THE STAGE</span>
-                    </div>
+            <div class="max-w-2xl mx-auto text-center z-10 space-y-6 theatre-panel p-12 rounded-3xl border border-gold-500/40">
+                <span class="text-gold-400 font-serif text-xs tracking-widest uppercase">Act VIII</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-100">Curtain Call</h2>
+                <div class="w-16 h-0.5 mx-auto gold-divider"></div>
+                <p class="text-gray-300 font-serif italic text-base">"It connects everything together and gives a show its shine."</p>
+                <div class="pt-4">
+                    <button onclick="goToSlide(0)" class="px-8 py-3 rounded-full bg-gradient-to-r from-gold-500 to-amber-600 text-velvet-950 font-serif font-bold text-xs uppercase tracking-widest">Return to Overture</button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Canvas & Audio Logic Scripts -->
+    <!-- Canvas & Interactivity Scripts -->
     <script>
-        // Global State & Elements
         const TOTAL_SLIDES = 8;
         let currentSlide = 0;
         const wrapper = document.getElementById('slides-wrapper');
@@ -601,7 +373,7 @@
         const dotTemplate = document.getElementById('dot-template');
         const spotlightLayer = document.getElementById('spotlight-layer');
 
-        // Mouse Spotlight Tracking
+        // Dynamic Spotlight Following Cursor
         window.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth) * 100;
             const y = (e.clientY / window.innerHeight) * 100;
@@ -620,21 +392,21 @@
         function updateActiveDot(index) {
             dots.forEach((dot, idx) => {
                 if (idx === index) {
-                    dot.classList.add('bg-amber-400', 'w-8');
+                    dot.classList.add('bg-gold-400', 'w-8');
                     dot.classList.remove('bg-gray-800', 'w-3');
                 } else {
-                    dot.classList.remove('bg-amber-400', 'w-8');
+                    dot.classList.remove('bg-gold-400', 'w-8');
                     dot.classList.add('bg-gray-800', 'w-3');
                 }
             });
 
             document.querySelectorAll('.nav-link').forEach((link, idx) => {
                 if (idx === index) {
-                    link.classList.add('text-amber-400', 'bg-gray-900');
-                    link.classList.remove('text-gray-400');
+                    link.classList.add('text-gold-400', 'bg-velvet-800');
+                    link.classList.remove('text-gray-300');
                 } else {
-                    link.classList.remove('text-amber-400', 'bg-gray-900');
-                    link.classList.add('text-gray-400');
+                    link.classList.remove('text-gold-400', 'bg-velvet-800');
+                    link.classList.add('text-gray-300');
                 }
             });
         }
@@ -644,7 +416,6 @@
             const targetSlide = document.getElementById(`slide-${index}`);
             targetSlide.scrollIntoView({ behavior: 'smooth' });
             updateActiveDot(index);
-            playAudioCue();
         }
 
         const slideObserver = new IntersectionObserver((entries) => {
@@ -660,13 +431,11 @@
 
         document.querySelectorAll('.slide').forEach(slide => slideObserver.observe(slide));
 
-        // Background Stage Canvas Dust & Spotlight Beams
+        // Background Atmospheric Stage Canvas (Velvet Haze & Dust Motes)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
-
-        let globalHazeDensity = 0.4;
 
         window.addEventListener('resize', () => {
             width = canvas.width = window.innerWidth;
@@ -679,9 +448,9 @@
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
                 this.size = Math.random() * 2 + 0.5;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.alpha = Math.random() * 0.6 + 0.1;
+                this.speedY = Math.random() * 0.3 - 0.15;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.alpha = Math.random() * 0.5 + 0.1;
             }
             update() {
                 this.x += this.speedX;
@@ -691,40 +460,42 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(251, 191, 36, ${this.alpha * globalHazeDensity})`;
+                ctx.fillStyle = `rgba(234, 179, 8, ${this.alpha})`;
                 ctx.fill();
             }
         }
 
-        const dustArray = Array.from({ length: 90 }, () => new DustParticle());
+        const dustArray = Array.from({ length: 60 }, () => new DustParticle());
 
         function animateBg() {
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Stage Overhead Beams
+            // Draw Stage Overhead Beams (Golden Warmth)
             ctx.save();
             ctx.globalCompositeOperation = 'screen';
-            const gradient1 = ctx.createLinearGradient(width * 0.2, 0, width * 0.3, height);
-            gradient1.addColorStop(0, 'rgba(245, 158, 11, 0.12)');
+            
+            const gradient1 = ctx.createLinearGradient(width * 0.25, 0, width * 0.35, height);
+            gradient1.addColorStop(0, 'rgba(234, 179, 8, 0.08)');
             gradient1.addColorStop(1, 'transparent');
             ctx.fillStyle = gradient1;
             ctx.beginPath();
-            ctx.moveTo(width * 0.2, 0);
-            ctx.lineTo(width * 0.35, height);
-            ctx.lineTo(width * 0.1, height);
+            ctx.moveTo(width * 0.25, 0);
+            ctx.lineTo(width * 0.45, height);
+            ctx.lineTo(width * 0.15, height);
             ctx.closePath();
             ctx.fill();
 
-            const gradient2 = ctx.createLinearGradient(width * 0.8, 0, width * 0.7, height);
-            gradient2.addColorStop(0, 'rgba(234, 179, 8, 0.12)');
+            const gradient2 = ctx.createLinearGradient(width * 0.75, 0, width * 0.65, height);
+            gradient2.addColorStop(0, 'rgba(253, 224, 71, 0.08)');
             gradient2.addColorStop(1, 'transparent');
             ctx.fillStyle = gradient2;
             ctx.beginPath();
-            ctx.moveTo(width * 0.8, 0);
-            ctx.lineTo(width * 0.9, height);
-            ctx.lineTo(width * 0.65, height);
+            ctx.moveTo(width * 0.75, 0);
+            ctx.lineTo(width * 0.85, height);
+            ctx.lineTo(width * 0.55, height);
             ctx.closePath();
             ctx.fill();
+            
             ctx.restore();
 
             // Draw floating dust motes
@@ -737,156 +508,6 @@
         }
         animateBg();
 
-        // Slide 4 Fixture Selector Logic
-        const fixtureData = {
-            fresnel: {
-                title: "Fresnel Spotlight",
-                desc: "Produces a soft, diffused beam of light with stepped concentric lenses. Great for general stage washes where soft beam edges blend seamlessly across actor movement zones.",
-                graphicClass: "w-40 h-full bg-gradient-to-b from-amber-400/80 via-amber-500/30 to-transparent blur-md"
-            },
-            profile: {
-                title: "Profile / ERS (Ellipsoidal Reflector Spotlight)",
-                desc: "Delivers a sharp, controllable beam with internal framing shutters to shape light onto precise set pieces or project patterned Gobo shadows across the stage floor.",
-                graphicClass: "w-20 h-full bg-gradient-to-b from-yellow-300 via-amber-400/50 to-transparent blur-none border-x border-amber-300/40"
-            },
-            par: {
-                title: "PAR Can (Parabolic Aluminized Reflector)",
-                desc: "The classic stage workhorse punch light. Produces an intense oval beam ideal for strong color washes, backlighting, and punchy side-stage lighting angles.",
-                graphicClass: "w-48 h-full bg-gradient-to-b from-amber-500/90 via-amber-600/40 to-transparent blur-lg"
-            },
-            mover: {
-                title: "Automated Moving Head Spot",
-                desc: "Computerized robotic fixture capable of 540-degree pan and tilt movement, motorized zoom, color wheel mixing, double gobo wheels, and rotating prisms.",
-                graphicClass: "w-16 h-full bg-gradient-to-b from-cyan-400 via-amber-400/60 to-transparent blur-sm animate-beam-sweep"
-            }
-        };
-
-        function selectFixture(type) {
-            document.querySelectorAll('.fixture-btn').forEach(btn => {
-                btn.classList.remove('border-amber-500', 'active-fixture');
-            });
-            event.currentTarget.classList.add('border-amber-500', 'active-fixture');
-
-            const data = fixtureData[type];
-            document.getElementById('fixture-title').innerText = data.title;
-            document.getElementById('fixture-desc').innerText = data.desc;
-            document.getElementById('fixture-beam-graphic').className = data.graphicClass;
-            playAudioCue();
-        }
-
-        // Slide 5 Color Gel Synthesizer
-        function updateGelColor() {
-            const r = document.getElementById('slider-r').value;
-            const g = document.getElementById('slider-g').value;
-            const b = document.getElementById('slider-b').value;
-
-            document.getElementById('r-val').innerText = r;
-            document.getElementById('g-val').innerText = g;
-            document.getElementById('b-val').innerText = b;
-
-            const box = document.getElementById('gel-preview-box');
-            box.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-            box.style.boxShadow = `0 0 40px rgba(${r}, ${g}, ${b}, 0.5)`;
-
-            const hex = "#" + ((1 << 24) + (parseInt(r) << 16) + (parseInt(g) << 8) + parseInt(b)).toString(16).slice(1).toUpperCase();
-            document.getElementById('hex-display').innerText = hex;
-        }
-
-        function setGelPreset(r, g, b) {
-            document.getElementById('slider-r').value = r;
-            document.getElementById('slider-g').value = g;
-            document.getElementById('slider-b').value = b;
-            updateGelColor();
-            playAudioCue();
-        }
-        updateGelColor();
-
-        // Slide 7 DMX Lighting Board Controls
-        function updateDMXBoard() {
-            const keyInt = document.getElementById('fader-key').value;
-            const haze = document.getElementById('fader-haze').value;
-            const temp = document.getElementById('fader-temp').value;
-            const spot = document.getElementById('fader-spot').value;
-
-            document.getElementById('fader-key-val').innerText = `${keyInt}%`;
-            document.getElementById('fader-haze-val').innerText = `${haze}%`;
-            document.getElementById('fader-temp-val').innerText = temp > 50 ? 'WARM' : 'COOL';
-            document.getElementById('fader-spot-val').innerText = `${spot}deg`;
-
-            globalHazeDensity = haze / 50;
-            spotlightLayer.style.opacity = keyInt / 100;
-        }
-
-        function applyCuePreset(preset) {
-            if (preset === 'dramatic') {
-                document.getElementById('fader-key').value = 90;
-                document.getElementById('fader-haze').value = 70;
-                document.getElementById('fader-temp').value = 90;
-                document.getElementById('fader-spot').value = 25;
-            } else if (preset === 'full') {
-                document.getElementById('fader-key').value = 100;
-                document.getElementById('fader-haze').value = 30;
-                document.getElementById('fader-temp').value = 50;
-                document.getElementById('fader-spot').value = 90;
-            } else if (preset === 'blackout') {
-                document.getElementById('fader-key').value = 0;
-                document.getElementById('fader-haze').value = 10;
-                document.getElementById('fader-temp').value = 0;
-                document.getElementById('fader-spot').value = 10;
-            }
-            updateDMXBoard();
-            playAudioCue();
-        }
-
-        // Web Audio Sound Cue Synthesizer
-        let audioCtx = null;
-        let audioActive = false;
-
-        function toggleAudioSynth() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            audioActive = !audioActive;
-
-            const icon = document.getElementById('sound-icon');
-            const text = document.getElementById('sound-text');
-
-            if (audioActive) {
-                audioCtx.resume();
-                icon.className = "fa-solid fa-volume-high";
-                text.innerText = "STAGE CUES ON";
-                playAudioCue();
-            } else {
-                icon.className = "fa-solid fa-volume-xmark";
-                text.innerText = "STAGE CUES OFF";
-            }
-        }
-
-        function playAudioCue() {
-            if (!audioActive || !audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 tone
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.25);
-        }
-
-        function triggerStageCueFlash() {
-            const overlay = document.createElement('div');
-            overlay.className = 'fixed inset-0 bg-amber-200/30 z-50 pointer-events-none transition-opacity duration-700 opacity-100';
-            document.body.appendChild(overlay);
-            playAudioCue();
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.remove(), 700);
-            }, 100);
-        }
-
         // Keyboard Navigation Support
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown' || e.key === 'PageDown') {
@@ -896,7 +517,7 @@
             }
         });
 
-        // Initial setup
+        // Initial Setup
         updateActiveDot(0);
     </script>
 </body>
